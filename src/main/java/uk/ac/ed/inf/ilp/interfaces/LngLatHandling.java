@@ -1,5 +1,6 @@
 package uk.ac.ed.inf.ilp.interfaces;
 
+import uk.ac.ed.inf.ilp.constant.CentralRegionVertexOrder;
 import uk.ac.ed.inf.ilp.constant.SystemConstants;
 import uk.ac.ed.inf.ilp.data.LngLat;
 import uk.ac.ed.inf.ilp.data.NamedRegion;
@@ -54,8 +55,11 @@ public interface LngLatHandling {
      * @return if the position is inside the region (including the border)
      */
     default boolean isInRegion(LngLat position, NamedRegion region) {
-        LngLat[] rVertices = region.vertices();
-        return true;
+        LngLat topLeft = region.vertices()[CentralRegionVertexOrder.TOP_LEFT];
+        LngLat botLeft = region.vertices()[CentralRegionVertexOrder.BOTTOM_LEFT];
+        LngLat botRight = region.vertices()[CentralRegionVertexOrder.BOTTOM_RIGHT];
+        LngLat topRight = region.vertices()[CentralRegionVertexOrder.TOP_RIGHT];
+
 
     };
 
