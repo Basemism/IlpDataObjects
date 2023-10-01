@@ -3,7 +3,7 @@ package uk.ac.ed.inf.ilp.interfaces;
 import uk.ac.ed.inf.ilp.constant.SystemConstants;
 import uk.ac.ed.inf.ilp.data.LngLat;
 import uk.ac.ed.inf.ilp.data.NamedRegion;
-
+import java.lang.Math;
 /**
  * implement the needed computations for a LngLat
  */
@@ -14,7 +14,11 @@ public interface LngLatHandling {
      * @param endPosition is where the end is
      * @return the euclidean distance between the positions
      */
-    double distanceTo(LngLat startPosition, LngLat endPosition);
+    default double distanceTo(LngLat startPosition, LngLat endPosition) {
+        double lngSum = Math.pow(startPosition.lng() - endPosition.lng(), 2);
+        double latSum = Math.pow(startPosition.lat() - endPosition.lat(), 2);
+        return Math.sqrt(lngSum+latSum);
+    };
 
     /**
      * check if two positions are close (<= than SystemConstants.DRONE_IS_CLOSE_DISTANCE)
@@ -22,7 +26,9 @@ public interface LngLatHandling {
      * @param otherPosition is the position to check
      * @return if the positions are close
      */
-    boolean isCloseTo(LngLat startPosition, LngLat otherPosition);
+    default boolean isCloseTo(LngLat startPosition, LngLat otherPosition) {
+        return (distanceTo(startPosition, otherPosition) <= SystemConstants.DRONE_IS_CLOSE_DISTANCE);
+    };
 
     /**
      * special handling shortcut for the central area. Here an implementation might add special improved processing as the central region is always rectangular
@@ -47,7 +53,11 @@ public interface LngLatHandling {
      * @param region as a closed polygon
      * @return if the position is inside the region (including the border)
      */
-    boolean isInRegion(LngLat position, NamedRegion region);
+    default boolean isInRegion(LngLat position, NamedRegion region) {
+        LngLat[] rVertices = region.vertices();
+        return true;
+
+    };
 
     /**
      * find the next position if an @angle is applied to a @startPosition
